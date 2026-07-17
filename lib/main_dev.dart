@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'router/app_routes.dart';
 
 void main() {
-  runApp(const ChaptersApp());
+  runApp(
+      const ProviderScope(
+        child: ChaptersApp(),
+      ),
+  );
 }
 
 class ChaptersApp extends StatelessWidget {
@@ -9,17 +15,13 @@ class ChaptersApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: "Chapters",
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Scaffold(
-        body: Center(
-          child: Text("Chapters Engine Initialized"),
-        ),
-      ),
+      routerConfig: goRouter,
     );
   }
 }
