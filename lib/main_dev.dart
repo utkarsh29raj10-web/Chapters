@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'router/app_routes.dart';
+import 'theme/app_theme.dart';
 
 void main() {
   runApp(
@@ -10,17 +11,16 @@ void main() {
   );
 }
 
-class ChaptersApp extends StatelessWidget {
+class ChaptersApp extends ConsumerWidget {
   const ChaptersApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeState = ref.watch(themeProvider);
+
     return MaterialApp.router(
       title: "Chapters",
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: AppTheme.getTheme(themeState.type, themeState.isDark),
       routerConfig: goRouter,
     );
   }
