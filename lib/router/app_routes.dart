@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../theme/app_theme.dart';
+import '../database/database_helper.dart';
 
 class DummyScreen extends ConsumerWidget {
   final String title;
@@ -10,42 +10,37 @@ class DummyScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeNotifier = ref.read(themeProvider.notifier);
-
     return Scaffold(
       appBar: AppBar(title: Text(title)),
-      body: Center(child: Column(
+      body: Center(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Chapters", style: Theme.of(context).textTheme.displaySmall),
-            Text("Everything is Here.", style: Theme.of(context).textTheme.headlineLarge),
-            Text("I feel like something ought to be done about this.", style: Theme.of(context).textTheme.bodyLarge),
-            const SizedBox(height: 30),
-
-            Container (
-              padding: const EdgeInsets.all(16),
-              color: Theme.of(context).extension<AppColorsExtension>()!.surfaceAlt,
-              child: const Text("Surface Alt container"),
-            ),
-
-            const SizedBox(height: 30),
-
             ElevatedButton(
-              onPressed: () => themeNotifier.toggleDarkMode(),
-              child: const Text("Toggle Light/Dark Mode"),
+              onPressed: () async {
+                final db = await DatabaseHelper.instance.database;
+                await db.execute("INSERT INTO Chapters (name, description, created_at) VALUES ('My Life', 'Test', '2026-07-17')");
+                await db.execute("INSERT INTO Journals (chapter_id, name, is_locked) VALUES (1, 'Daily Thoughts', 0)");
+                await db.execute("INSERT INTO Entries (journal_id, content, date, is_locked) VALUES (1, 'I had a wonderful cup of coffee today', '2026-07-17', 0)");
+                print("Dummy Entry Inserted!");
+              },
+              child: const Text('1. Insert Dummy Entry ("coffee")'),
             ),
-
-            const SizedBox(height: 10),
-
+            const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () => themeNotifier.setThemeType(AppThemeType.oceanBreeze),
-              child: const Text("switch to Ocean Breeze"),
-            ),
+              onPressed: () async {
+                final db = await DatabaseHelper.instance.database;
 
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () => themeNotifier.setThemeType(AppThemeType.midnightInk),
-              child: const Text("Revert to Midnight Ink Theme"),
+                final results = await db.rawQuery("SELECT * FROM EntriesSearch WHERE content MATCH 'coffee'");
+
+                if (results.isNotEmpty) {
+                  print("FTS5 SUCCESS! Found: \${results.first['content']}");
+                } else {
+                  print("FTS5 FAILED: No results found.");
+                }
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary),
+              child: const Text('2. Search FTS5 for "coffee"', style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
@@ -59,11 +54,7 @@ final goRouter = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => const DummyScreen(title: "UI Variables check"),
+      builder: (context, state) => const DummyScreen(title: 'FTS5 Search Test'),
     ),
-    // GoRoute(
-    //   path: '/home',
-    //   builder: (context, state) => const DummyScreen(title: "Screen 4: Home Dashboard"),
-    // ),
   ],
 );

@@ -10,7 +10,7 @@ class DatabaseHelper {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB("chapters_secure.db");
+    _database = await _initDB("chapters_v6.db"); // changed to v4 to force build new file thus createdb
     return _database!;
   }
 
@@ -31,14 +31,14 @@ class DatabaseHelper {
     const textType = "TEXT NOT NULL";
     const boolType = "BOOLEAN NOT NULL";
     const integerType = "INTEGER NOT NULL";
-    const realType = "REAL NOT NUL";
+    const realType = "REAL NOT NULL";
 
     await db.execute('''
       CREATE TABLE Chapters (
         id $idType,
         name $textType,
         description $textType,
-        created_at $textType,
+        created_at $textType
       )
     ''');
 
@@ -69,8 +69,40 @@ class DatabaseHelper {
         entry_id $integerType,
         x $realType,
         y $realType,
-        FOREIGN KEY (entry_id) REFERENCES Entires (id) ON DELETE CASCADE
+        FOREIGN KEY (entry_id) REFERENCES Entries (id) ON DELETE CASCADE
       )
+    ''');
+
+    await db.execute('''
+      CREATE VIRTUAL TABLE EntriesSearch USING fts5(
+        entry_id UNINDEXED,
+        content  
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TRIGGER after_entry_insert
+      AFTER INSERT ON Entries
+      BEGIN
+        INSERT INTO EntriesSearch(rowid, entry_id, content) VALUES (new.id, new.id, new.content);
+      END;
+    ''');
+
+    await db.execute('''
+      CREATE TRIGGER after_entry_update
+      AFTER UPDATE ON Entries
+      BEGIN
+        DELETE FROM EntriesSearch WHERE entry_id = old.id;
+        INSERT INTO EntriesSearch(rowid, entry_id, content) VALUES(new.id, new.id, new.content);
+      END;
+    ''');
+
+    await db.execute('''
+      CREATE TRIGGER after_entry_delete
+      AFTER DELETE ON Entries
+      BEGIN
+        DELETE FROM EntriesSearch WHERE entry_id = old.id;
+      END;
     ''');
   }
 
