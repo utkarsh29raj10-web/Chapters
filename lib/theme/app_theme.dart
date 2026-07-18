@@ -24,9 +24,11 @@ class AppTheme {
 
     ColorScheme colorScheme;
     AppColorsExtension customColors;
+    Color scaffoldBackground;
 
     switch (type) {
       case AppThemeType.midnightInk:
+        scaffoldBackground = isDark ? const Color(0xFF0F172A) : const Color(0xFFF9F7F3);
         colorScheme = isDark
             ? const ColorScheme.dark(surface: Color(0xFF162336), primary: Color(0xFF6C90D8), secondary: Color(0xFFD8B775), onSurface: Color(0xFFF6F7FB), error: Color(0xFFC4554D))
             : const ColorScheme.light(surface: Color(0xFFFFFFFF), primary: Color(0xFF183153), secondary: Color(0xFFC6A15B), onSurface: Color(0xFF182230), error: Color(0xFFC4554D),);
@@ -38,6 +40,7 @@ class AppTheme {
         break;
 
       case AppThemeType.sageCalm:
+        scaffoldBackground = isDark ? const Color(0xFF112019) : const Color(0xFFF7FAF6);
         colorScheme = isDark
             ? const ColorScheme.dark(surface: Color(0xFF183126), primary: Color(0xFF82B89B), secondary: Color(0xFFD7C89B), onSurface: Color(0xFFF3F8F4), error: Color(0xFFBB5959))
             : const ColorScheme.light(surface: Color(0xFFFFFFFF), primary: Color(0xFF2E5B47), secondary: Color(0xFFD7C89B), onSurface: Color(0xFF22332C), error: Color(0xFFBB5959));
@@ -47,6 +50,7 @@ class AppTheme {
         break;
 
       case AppThemeType.warmPaper:
+        scaffoldBackground = isDark ? const Color(0xFF241B17) : const Color(0xFFFCF7F1);
         colorScheme = isDark
             ? const ColorScheme.dark(surface: Color(0xFF342821), primary: Color(0xFFE39467), secondary: Color(0xFFD49A73), onSurface: Color(0xFFFFF7F2), error: Color(0xFFC4554D))
             : const ColorScheme.light(surface: Color(0xFFFFFFFF), primary: Color(0xFFBA6236), secondary: Color(0xFF6E4D3A), onSurface: Color(0xFF382C25), error: Color(0xFFC4554D));
@@ -56,6 +60,7 @@ class AppTheme {
         break;
 
       case AppThemeType.duskPurple:
+        scaffoldBackground = isDark ? const Color(0xFF1B1527) : const Color(0xFFFBF8FD);
         colorScheme = isDark
             ? const ColorScheme.dark(surface: Color(0xFF29203A), primary: Color(0xFFB89AE6), secondary: Color(0xFFF0C9A8), onSurface: Color(0xFFF8F5FD), error: Color(0xFFC05656))
             : const ColorScheme.light(surface: Color(0xFFFFFFFF), primary: Color(0xFF5A3F87), secondary: Color(0xFFF0C9A8), onSurface: Color(0xFF30243E), error: Color(0xFFC05656));
@@ -65,6 +70,7 @@ class AppTheme {
         break;
 
       case AppThemeType.oceanBreeze:
+        scaffoldBackground = isDark ? const Color(0xFF0F2028) : const Color(0xFFF7FBFC);
         colorScheme = isDark
             ? const ColorScheme.dark(surface: Color(0xFF18313B), primary: Color(0xFF7CC2D3), secondary: Color(0xFF4FA3B5), onSurface: Color(0xFFF6FAFC), error: Color(0xFFC25555))
             : const ColorScheme.light(surface: Color(0xFFFFFFFF), primary: Color(0xFF2F7284), secondary: Color(0xFF4FA3B5), onSurface: Color(0xFF1C2C35), error: Color(0xFFC25555));
@@ -74,6 +80,7 @@ class AppTheme {
         break;
 
       case AppThemeType.monochrome:
+        scaffoldBackground = isDark ? const Color(0xFF111111) : const Color(0xFFFAFAFA);
         colorScheme = isDark
             ? const ColorScheme.dark(surface: Color(0xFF1D1D1D), primary: Color(0xFFE5E5E5), secondary: Color(0xFFA8A8A8), onSurface: Color(0xFFFFFFFF), error: Color(0xFFB94C4C))
             : const ColorScheme.light(surface: Color(0xFFFFFFFF), primary: Color(0xFF222222), secondary: Color(0xFFA8A8A8), onSurface: Color(0xFF1A1A1A), error: Color(0xFFB94C4C));
@@ -86,11 +93,11 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: colorScheme.surface,
+      scaffoldBackgroundColor: scaffoldBackground,
       textTheme: customTextTheme,
       extensions: [customColors],
       appBarTheme: AppBarTheme(
-        backgroundColor: colorScheme.surface,
+        backgroundColor: scaffoldBackground,
         foregroundColor: colorScheme.onSurface,
         elevation: 0,
       ),
