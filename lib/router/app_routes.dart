@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../screens/splash_screen.dart';
+import '../widgets/top_bar.dart';
 
 class DummyHome extends StatelessWidget {
   const DummyHome({super.key});
@@ -8,7 +9,7 @@ class DummyHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Home (S4)")),
+      appBar: const TopBar(),
       body: const Center(
         child: Text("Testing Splash.")),
     );
