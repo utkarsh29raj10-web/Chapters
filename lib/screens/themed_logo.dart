@@ -19,6 +19,7 @@ class ThemedLogo extends StatelessWidget {
     final surfaceHex = toHex(theme.colorScheme.surface);
     final surfaceAltHex = toHex(customColors.surfaceAlt);
     final primaryLightHex = toHex(customColors.primaryLight);
+    final backgroundHex = toHex(theme.scaffoldBackgroundColor);
 
     String rawSvg = '''
 <svg width="102" height="104" viewBox="0 0 102 104" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -42,7 +43,7 @@ class ThemedLogo extends StatelessWidget {
         .replaceAll('#0F172A', primaryHex)
         .replaceAll('#D8E1EA', primaryLightHex)
         .replaceAll('#D9D9D9', surfaceAltHex)
-        .replaceAll('#FEF8F5', surfaceHex)
+        .replaceAll('#FEF8F5', backgroundHex)
         .replaceAll('#22406B', primaryHex)
         .replaceAll('#0C1B32', onSurfaceHex);
 
